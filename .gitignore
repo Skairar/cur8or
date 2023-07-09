@@ -1,0 +1,4 @@
+build/cmake/*
+.vscode/*
+libpaths.txt
+build/curator-client.exe

@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.26)
+project(cur8-proto VERSION 0.0.1)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+
+file(STRINGS libpaths.txt ConfigContents)
+foreach(NameAndValue ${ConfigContents})
+    # Strip leading spaces
+    string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
+    # Find variable name
+    string(REGEX MATCH "^[^=]+" Name ${NameAndValue})
+    # Find the value
+    string(REPLACE "${Name}=" "" Value ${NameAndValue})
+    # Set the variable
+    set(${Name} "${Value}")
+endforeach()
+
+#set(Boost_DEBUG 1)
+#set(Boost_DETAILED_FAILURE_MSG 1)
+set(Boost_ARCHITECTURE "-x64")
+set(Boost_USE_STATIC_LIBS ON)
+
+find_package(Boost 1.82.0 REQUIRED COMPONENTS log program_options)
+
+add_library(SQLite3 STATIC ${SQLite_SRC})
+
+include_directories(${Boost_INCLUDE_DIRS} ${SQLite_INCLUDE_DIR})
+
+add_subdirectory(src/client)
