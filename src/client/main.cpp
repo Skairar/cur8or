@@ -26,8 +26,6 @@ namespace http = beast::http;           // from <boost/beast/http.hpp>
 namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
-using namespace network;
-
 
 int main(int argc, char* argv[])
 {
@@ -54,9 +52,9 @@ int main(int argc, char* argv[])
         ioc,
         tcp::endpoint{address, port},
         [&](tcp::socket socket) {
-          std::make_shared<HTTPSession>(
+          std::make_shared<network::HTTPSession>(
             std::move(socket),
-            ResponseBuilder<http::string_body, http::fields>{*interfaceRoot}
+            network::ResponseBuilder<http::string_body>{*interfaceRoot}
             )->startSession();
         })->acceptUpcoming();
 

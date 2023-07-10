@@ -5,7 +5,7 @@ namespace network {
 
 HTTPSession::HTTPSession(
   tcp::socket&& socket,
-  ResponseBuilder<http::string_body, http::fields> &&builder
+  ResponseBuilder<http::string_body> &&builder
 ) :
   stream_{std::move(socket)},
   builder_{std::move(builder)}
@@ -60,7 +60,6 @@ void HTTPSession::processRequest(
   };
 
   builder_.setRequest(std::move(request_));
-  builder_.processRequest();
     
   sendResponse(builder_.getResponse());
 

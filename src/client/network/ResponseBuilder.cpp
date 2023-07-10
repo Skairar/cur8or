@@ -1,5 +1,4 @@
 #include "ResponseBuilder.hpp"
-#include "ResponseBuilder.tpp"
 
 #include <unordered_map>
 #include <string_view>

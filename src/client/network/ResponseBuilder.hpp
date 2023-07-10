@@ -21,26 +21,25 @@ class ResponseBuilder
 {
 
   using RequestType = http::request<Body>;
-  using ResponseType = http::message_generator;
 
 public:
 
   ResponseBuilder(std::filesystem::path workingDirectory);
 
   void setRequest(RequestType &&request);
-  void processRequest();
-  ResponseType&& getResponse();
+  http::message_generator getResponse();
 
 private:
 
   std::filesystem::path workingDirectory_;
   RequestType request_;
-  ResponseType response_;
   
-  
-  void errorResponse(http::status status, std::string_view message);
+  http::message_generator errorResponse(http::status status, std::string_view message);
 
 };
 
 
 }
+
+
+#include "ResponseBuilder.tpp"

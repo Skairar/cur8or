@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include <string_view>
 #include <filesystem>
@@ -29,7 +29,7 @@ public:
 
   HTTPSession(
     tcp::socket&& socket,
-    ResponseBuilder<http::string_body, http::fields> &&builder
+    ResponseBuilder<http::string_body> &&builder
   );
 
    

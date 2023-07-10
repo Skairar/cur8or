@@ -4,7 +4,9 @@ add_library(client-network STATIC network/SocketListener.cpp
                                   network/HTTPSession.cpp
                                   network/HTTPSession.hpp
                                   network/ResponseBuilder.cpp
-                                  network/ResponseBuilder.hpp)
+                                  network/ResponseBuilder.hpp
+                                  network/ResponseBuilder.tpp
+                                  )
 add_executable(curator-client main.cpp)
 target_link_libraries(client-network ws2_32 wsock32)
 target_link_libraries(curator-client client-network)
