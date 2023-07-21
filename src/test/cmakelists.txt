@@ -1,0 +1,7 @@
+enable_testing()
+
+add_executable(utilities_test utilities/utilities_test.cpp)
+
+target_link_libraries(utilities_test utilities)
+
+add_test(NAME "Utilities Test" COMMAND utilities_test)

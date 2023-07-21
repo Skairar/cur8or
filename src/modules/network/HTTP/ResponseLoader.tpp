@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ResponseLoader.hpp"
+
 #include <boost/system/error_code.hpp>
 
 #include <boost/beast/http/message.hpp>
@@ -9,33 +11,29 @@
 #include <boost/beast/version.hpp>
 
 
-namespace network {
+namespace network::http {
 
 
 namespace beast = boost::beast;
 namespace http = beast::http;
 
 
-template <class Body>
-ResponseBuilder<Body>::ResponseBuilder(
-  std::filesystem::path workingDirectory
-) : workingDirectory_{workingDirectory}
-{
-  //empty
-}
-
-
-template <class Body>
-void ResponseBuilder<Body>::setRequest(
-  ResponseBuilder<Body>::RequestType &&request
+template <class ResourceProvider>
+void ResponseLoader<ResourceProvider>::generateResponse(
+    ResponseLoader<ResourceProvider>::RequestType&& request,
+    ResponseLoader<ResourceProvider>::ResponseCallback&& onResponseReadyCallback
 ) {
-  request_ = std::move(request);
-}
 
+  if (request.target().empty() ||
+      request.target()[0] != '/' ||
+      request.target().find("..") != std::string_view::npos) {
+    return errorResponse(
+      http::status::bad_request,
+      "Illegal request-target"
+    );
+  }
 
-template <class Body>
-http::message_generator ResponseBuilder<Body>::getResponse() {
-    
+/*
   if (request_.method() != http::verb::get &&
       request_.method() != http::verb::head &&
       request_.method() != http::verb::post) {
@@ -44,40 +42,35 @@ http::message_generator ResponseBuilder<Body>::getResponse() {
       "Unknown HTTP-method"
     );
   }
-
-  if (request_.target().empty() ||
-      request_.target()[0] != '/' ||
-      request_.target().find("..") != std::string_view::npos) {
-    return errorResponse(
-      http::status::bad_request,
-      "Illegal request-target"
-    );
-  }
-
+*/
+/*
   std::filesystem::path path = workingDirectory_;
   path.concat(std::string_view{request_.target()});
   if (std::filesystem::is_directory(path)) {
     path /= "index.html";
   }
-
+*/
+/*
   boost::system::error_code errorCode;
   http::file_body::value_type body;
   body.open(path.string().c_str(), beast::file_mode::scan, errorCode);
-
+*/
+/*
   if (errorCode == boost::system::errc::no_such_file_or_directory) {
     return errorResponse(
       http::status::not_found,
       request_.target()
     );
   }
-
+*/
+/*
   if (errorCode) {
     return errorResponse(
       http::status::internal_server_error,
       errorCode.message()
     );
   }
-
+*/
   auto const size = body.size();
 
   if (request_.method() == http::verb::head)
@@ -115,9 +108,9 @@ http::message_generator ResponseBuilder<Body>::getResponse() {
 }
 
 
-template <class Body>
+template <class ResourceProvider>
 http::message_generator
-  ResponseBuilder<Body>::errorResponse(
+  ResponseLoader<ResourceProvider>::errorResponse(
     http::status status,
     std::string_view message
   ) {

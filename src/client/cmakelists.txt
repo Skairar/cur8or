@@ -1,13 +1,5 @@
 #add_library(client-database STATIC database/DatabaseConnection.hpp database/DatabaseConnection.cpp)
-add_library(client-network STATIC network/SocketListener.cpp
-                                  network/SocketListener.hpp
-                                  network/HTTPSession.cpp
-                                  network/HTTPSession.hpp
-                                  network/ResponseBuilder.cpp
-                                  network/ResponseBuilder.hpp
-                                  network/ResponseBuilder.tpp
-                                  )
+
 add_executable(curator-client main.cpp)
-target_link_libraries(client-network ws2_32 wsock32)
 target_link_libraries(curator-client client-network)
 #target_link_libraries(client-database SQLite3)

@@ -11,10 +11,8 @@
 #include <boost/asio/dispatch.hpp>
 #include <boost/asio/strand.hpp>
 
-#include "ResponseBuilder.hpp"
 
-
-namespace network {
+namespace network::http {
 
 
 namespace beast = boost::beast;
@@ -23,13 +21,21 @@ namespace asio = boost::asio;
 using tcp = boost::asio::ip::tcp; 
 
 
-class HTTPSession : public std::enable_shared_from_this<HTTPSession>
+class SimpleSession : public std::enable_shared_from_this<SimpleSession>
 {
 public:
 
-  HTTPSession(
+  using RequestType = http::request<http::string_body>;
+
+  using ResponseCallback = std::function<void(http::message_generator)>;
+
+  using ResponseLoader = std::function<
+    void(RequestType&&, ResponseCallback&&)
+  >;
+
+  SimpleSession(
     tcp::socket&& socket,
-    ResponseBuilder<http::string_body> &&builder
+    ResponseLoader&& loader
   );
 
    
@@ -52,7 +58,7 @@ private:
   beast::tcp_stream stream_;
   beast::flat_buffer buffer_;
   http::request<http::string_body> request_;
-  ResponseBuilder<http::string_body> builder_;
+  ResponseLoader loader_;
 
 };
 

@@ -1,0 +1,4 @@
+add_library(utilities STATIC adaptors/KeyValueAdaptor.cpp
+                             adaptors/KeyValueAdaptor.hpp
+                             adaptors/ParamPathAdaptor.cpp
+                             adaptors/ParamPathAdaptor.hpp)

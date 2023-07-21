@@ -1,31 +1,31 @@
-#include "HTTPSession.hpp"
+#include "SimpleSession.hpp"
 
-namespace network {
+namespace network::http {
 
 
-HTTPSession::HTTPSession(
+SimpleSession::SimpleSession(
   tcp::socket&& socket,
-  ResponseBuilder<http::string_body> &&builder
+  SimpleSession::ResponseLoader &&loader
 ) :
   stream_{std::move(socket)},
-  builder_{std::move(builder)}
+  loader_{std::move(loader)}
 {
   //empty
 }
 
    
-void HTTPSession::startSession() {
+void SimpleSession::startSession() {
   asio::dispatch(
     stream_.get_executor(),
     std::bind_front(
-      &HTTPSession::readStream,
+      &SimpleSession::readStream,
       shared_from_this()
     )
   );
 }
 
   
-void HTTPSession::readStream() {
+void SimpleSession::readStream() {
   
   request_ = {};
 
@@ -36,14 +36,14 @@ void HTTPSession::readStream() {
     buffer_,
     request_,
     std::bind_front(
-      &HTTPSession::processRequest,
+      &SimpleSession::processRequest,
       shared_from_this()
     )
   );
 }
 
 
-void HTTPSession::processRequest(
+void SimpleSession::processRequest(
   boost::system::error_code errorCode,
   std::size_t bytes_transferred
 ) {
@@ -59,14 +59,18 @@ void HTTPSession::processRequest(
     return;
   };
 
-  builder_.setRequest(std::move(request_));
-    
-  sendResponse(builder_.getResponse());
-
+  loader_(
+    std::move(request_),
+    std::bind_front(
+      &SimpleSession::sendResponse,
+      shared_from_this()
+    )
+  );
+\
 }
 
 
-void HTTPSession::sendResponse(http::message_generator&& message) {
+void SimpleSession::sendResponse(http::message_generator&& message) {
   
   bool keep_alive = message.keep_alive();
 
@@ -74,7 +78,7 @@ void HTTPSession::sendResponse(http::message_generator&& message) {
     stream_,
     std::move(message),
     std::bind_front(
-      &HTTPSession::responseStatus,
+      &SimpleSession::responseStatus,
       shared_from_this(),
       keep_alive
     )
@@ -82,7 +86,7 @@ void HTTPSession::sendResponse(http::message_generator&& message) {
 }
 
 
-void HTTPSession::responseStatus(
+void SimpleSession::responseStatus(
   bool keep_alive,
   boost::system::error_code errorCode,
   std::size_t bytesTransferred
@@ -99,7 +103,7 @@ void HTTPSession::responseStatus(
   }
 }
 
-void HTTPSession::endSession() {
+void SimpleSession::endSession() {
   boost::system::error_code errorCode;
   stream_.socket().shutdown(tcp::socket::shutdown_send, errorCode);
 }
