@@ -1,6 +1,8 @@
 #include "SocketListener.hpp"
 
 #include <boost/asio/strand.hpp>
+#include <boost/system/error_code.hpp>
+#include <iostream>
 
 namespace network {
 
@@ -30,6 +32,7 @@ SocketListener::SocketListener(
   connectionAcceptor_.open(listenedSocket.protocol(), errorCode);
   if(errorCode)
   {
+    std::cout << errorCode.message() << " open" << std::endl;
     //fail(ec, "open");
     return;
   }
@@ -37,6 +40,7 @@ SocketListener::SocketListener(
   connectionAcceptor_.set_option(asio::socket_base::reuse_address(true), errorCode);
   if(errorCode)
   {
+    std::cout << errorCode.message() << " set_option" << std::endl;
     //fail(ec, "set_option");
     return;
   }
@@ -44,6 +48,7 @@ SocketListener::SocketListener(
   connectionAcceptor_.bind(listenedSocket, errorCode);
   if(errorCode)
   {
+    std::cout << errorCode.message() << " bind" << std::endl;
     //fail(ec, "bind");
     return;
   }
@@ -53,6 +58,7 @@ SocketListener::SocketListener(
     asio::socket_base::max_listen_connections, errorCode);
   if(errorCode)
   {
+    std::cout << errorCode.message() << " listen" << std::endl;
     //fail(ec, "listen");
     return;
   }
@@ -65,6 +71,7 @@ void SocketListener::runHandlerOnSocket(
 ) {
   if(errorCode)
   {
+    std::cout << errorCode.message() << " accept" << std::endl;
     //fail(ec, "accept");
     return; // To avoid infinite loop
   }

@@ -2,4 +2,4 @@
 add_subdirectory(utilities)
 add_subdirectory(network)
 #add_subdirectory(database)
-#add_subdirectory(logic)
+add_subdirectory(logic)

@@ -2,9 +2,15 @@ add_library(client-network STATIC SocketListener.cpp
                                   SocketListener.hpp
                                   HTTP/SimpleSession.cpp
                                   HTTP/SimpleSession.hpp
-                                  HTTP/ResponseLoader.cpp
-                                  HTTP/ResponseLoader.hpp
-                                  HTTP/ResponseLoader.tpp
+                                  HTTP/MessageProcessor.cpp
+                                  HTTP/MessageProcessor.hpp
+                                  HTTP/MessageProcessor.tpp
+                                  HTTP/ResponseTemplate.cpp
+                                  HTTP/ResponseTemplate.hpp
+                                  HTTP/ResponseFinalizer.hpp
+                                  HTTP/ResponseFinalizer.cpp
+                                  HTTP/helpers/FileMimeType.cpp
+                                  HTTP/helpers/FileMimeType.hpp
                                   )
 
 target_link_libraries(client-network ws2_32 wsock32)

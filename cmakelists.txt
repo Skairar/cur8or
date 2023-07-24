@@ -32,5 +32,5 @@ add_library(SQLite3 STATIC ${SQLite_DIR}/sqlite3.c
 include_directories(${Boost_INCLUDE_DIRS} ${SQLite_DIR} src/modules)
 
 add_subdirectory(src/modules)
-#add_subdirectory(src/client)
+add_subdirectory(src/client)
 add_subdirectory(src/test)

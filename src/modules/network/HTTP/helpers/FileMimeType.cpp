@@ -1,11 +1,9 @@
-#include "ResponseLoader.hpp"
+#include "FileMimeType.hpp"
 
 #include <unordered_map>
-#include <string_view>
-#include <filesystem>
 
-namespace network::http {
 
+namespace network::http::helpers {
 
 
 std::string_view fileMimeType(const std::filesystem::path &filePath) noexcept

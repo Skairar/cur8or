@@ -2,4 +2,5 @@
 
 add_executable(curator-client main.cpp)
 target_link_libraries(curator-client client-network)
+target_link_libraries(curator-client client-logic)
 #target_link_libraries(client-database SQLite3)

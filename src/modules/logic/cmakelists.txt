@@ -1,0 +1,6 @@
+add_library(client-logic STATIC PathResolver/VirtualPathResolver.cpp
+                                PathResolver/VirtualPathResolver.hpp
+                                PathResolver/Query.cpp
+                                PathResolver/Query.hpp)
+
+target_link_libraries(client-logic utilities)
