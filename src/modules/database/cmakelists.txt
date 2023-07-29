@@ -1,0 +1,17 @@
+add_library(client-database STATIC embedded/SQLite3/Instance.cpp
+                                   embedded/SQLite3/Instance.hpp
+                                   embedded/SQLite3/Statement.cpp
+                                   embedded/SQLite3/Statement.hpp
+                                   embedded/SQLite3/ranges/Table.cpp
+                                   embedded/SQLite3/ranges/Table.hpp
+                                   embedded/SQLite3/ranges/Row.cpp
+                                   embedded/SQLite3/ranges/Row.hpp
+                                   embedded/SQLite3/ranges/Row.tpp
+                                   embedded/SQLite3/ranges/Field.cpp
+                                   embedded/SQLite3/ranges/Field.hpp
+                                   embedded/SQLite3/ranges/Field.tpp
+                                   embedded/SQLite3/serialization/JSON.cpp
+                                   embedded/SQLite3/serialization/JSON.hpp
+                                   embedded/SQLite3/serialization/JSON.tpp)
+
+target_link_libraries(client-database SQLite3 Boost::json)

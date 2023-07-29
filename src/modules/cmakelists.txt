@@ -1,5 +1,5 @@
 #add_subdirectory(core)
 add_subdirectory(utilities)
 add_subdirectory(network)
-#add_subdirectory(database)
+add_subdirectory(database)
 add_subdirectory(logic)

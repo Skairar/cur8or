@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+  <title>Query</title>
+  <script>
+
+function processJSONString(JSONstring){
+  var table = JSON.parse(JSONstring);  
+  var tableContainer = document.createElement("table");
+  var tableHeader = document.createElement("thead");
+  var tr = document.createElement("tr"); 
+  table.header.forEach(
+    key => {
+      var th = document.createElement("th");
+      th.innerText = key;
+      tr.appendChild(th);
+    }
+  );
+  tableContainer.appendChild(tableHeader).appendChild(tr);
+  var tableBody = document.createElement("tbody");
+  table.values.forEach(
+    valueRow => {
+      var tr = document.createElement("tr");
+      valueRow.forEach(
+        value => {
+          var td = document.createElement("td");
+          td.innerText = value;
+          tr.appendChild(td);
+        }
+      );
+      tableBody.appendChild(tr);
+    }
+  );
+  tableContainer.appendChild(tableBody);
+  document.getElementById("table_container").appendChild(tableContainer);
+}
+
+function querySQL(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if (this.readyState == 4) {
+      switch(this.status){
+        case 200:
+          processJSONString(xhttp.responseText);
+          break;
+        default:
+          var container = document.getElementById(tableContainer);
+          while (container.lastElementChild){
+            container.removeChild(container.lastElementChild);
+          }
+          container.innerText = xhttp.responseText;
+      } 
+    }
+  }
+  xhttp.open("POST", "/query", true);
+  xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhttp.send("sql=" + document.getElementById("sql").value);
+}
+
+  </script>
+</head>
+<body>
+
+  <input type="text" id="sql" name="sql" />
+  <input type="button" id="run" name="run" value="run" onclick="querySQL()"/>
+  <div id="table_container"></div>
+</body>
