@@ -12,17 +12,21 @@
 namespace network::http {
 
 
-ResponseTemplate::ResponseTemplate(ResponseTemplate::RequestType&& request)
+
+ResponseTemplate::ResponseTemplate(
+  ResponseTemplate::RequestType&& request
+) noexcept
  : request_{std::move(request)}
 {
   //empty
 }
 
 
+
 ResponseTemplate::ResponseType ResponseTemplate::errorResponse(
   ResponseTemplate::StatusType status,
   std::string_view message
-) {
+) noexcept{
   using namespace boost::beast::http;
   response<string_body> response{status, request_.version()};
   response.set(field::server, BOOST_BEAST_VERSION_STRING);
@@ -34,9 +38,10 @@ ResponseTemplate::ResponseType ResponseTemplate::errorResponse(
 }
 
 
+
 ResponseTemplate::ResponseType ResponseTemplate::fileResponse(
   ResponseTemplate::PathType path
-) {
+) noexcept{
   
   using namespace boost::beast;
   using namespace boost::beast::http;
@@ -82,7 +87,10 @@ ResponseTemplate::ResponseType ResponseTemplate::fileResponse(
 }
 
 
-ResponseTemplate::ResponseType ResponseTemplate::dataResponse(std::string&& data) {
+
+ResponseTemplate::ResponseType ResponseTemplate::dataResponse(
+  std::string&& data
+) noexcept{
   using namespace boost::beast::http;
   response<string_body> response{status::ok, request_.version()};
   response.set(field::server, BOOST_BEAST_VERSION_STRING);
@@ -95,4 +103,4 @@ ResponseTemplate::ResponseType ResponseTemplate::dataResponse(std::string&& data
 
 
 
-}
+}//namespace network::http

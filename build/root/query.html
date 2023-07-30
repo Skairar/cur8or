@@ -38,15 +38,15 @@ function querySQL(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(){
     if (this.readyState == 4) {
+      var container = document.getElementById("table_container");
+      while (container.lastElementChild){
+        container.removeChild(container.lastElementChild);
+      }
       switch(this.status){
         case 200:
           processJSONString(xhttp.responseText);
           break;
         default:
-          var container = document.getElementById(tableContainer);
-          while (container.lastElementChild){
-            container.removeChild(container.lastElementChild);
-          }
           container.innerText = xhttp.responseText;
       } 
     }

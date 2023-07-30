@@ -1,28 +1,31 @@
 #pragma once
+
 #include "MessageProcessor.hpp"
 
 #include "ResponseTemplate.hpp"
 #include "ResponseFinalizer.hpp"
-#include "logic/PathResolver/Query.hpp"
 
 
 namespace network::http {
 
 
+
 template <class PathResolver>
 MessageProcessor<PathResolver>::MessageProcessor(
   std::shared_ptr<PathResolver> pathResolver
-) : pathResolver_{pathResolver}
+) noexcept
+ : pathResolver_{pathResolver}
 {
   //empty
 }
+
 
 
 template <class PathResolver>
 void MessageProcessor<PathResolver>::operator()(
   MessageProcessor<PathResolver>::RequestType&& request,
   MessageProcessor<PathResolver>::ResponseCallback&& callback
-) {
+) noexcept{
 
   using namespace boost::beast::http;
 
@@ -57,7 +60,7 @@ void MessageProcessor<PathResolver>::operator()(
       std::move(callback)
     );
 
-  logic::vpath::Query query = pathResolver_->newQuery(
+  auto query = pathResolver_->newQuery(
     finalizer->getRequest().target()
   );
 
@@ -86,4 +89,6 @@ void MessageProcessor<PathResolver>::operator()(
 
 }
 
-}
+
+
+}//namespace network::http
