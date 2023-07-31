@@ -7,12 +7,14 @@
 namespace logic::vpath {
 
 
+
 void VirtualPathResolver::registerCallback(
   std::string_view vpath,
   VirtualPathResolver::CallbackType&& callback
 ) {
   pathMap_.emplace(vpath, std::move(callback));
 }
+
 
 
 Query VirtualPathResolver::newQuery(std::string_view target) {
@@ -26,6 +28,7 @@ Query VirtualPathResolver::newQuery(std::string_view target) {
 }
 
 
+
 //temporary
 bool VirtualPathResolver::supportedOperation(std::string_view vpath) {
   using namespace utilities::adaptors;
@@ -36,6 +39,7 @@ bool VirtualPathResolver::supportedOperation(std::string_view vpath) {
     !(pathMap_.contains((vpath | ParamPathAdaptor{}).front().first))
   ));
 }
+
 
 
 }

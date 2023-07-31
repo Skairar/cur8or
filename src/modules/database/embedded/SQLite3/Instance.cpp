@@ -2,7 +2,9 @@
 
 #include "Statement.hpp"
 
+
 namespace database::embedded::SQLite3{
+
 
 
 boost::leaf::result<std::shared_ptr<Instance>> Instance::newInstance(
@@ -25,7 +27,9 @@ boost::leaf::result<std::shared_ptr<Instance>> Instance::newInstance(
 }
 
 
+
 boost::leaf::result<std::shared_ptr<Instance>> Instance::newInstance() noexcept{
+  
   std::shared_ptr<Instance> instance = std::make_shared<Instance>();
   int errorCode = sqlite3_open(
     ":memory:",
@@ -40,12 +44,14 @@ boost::leaf::result<std::shared_ptr<Instance>> Instance::newInstance() noexcept{
   } else {
     return instance;
   }
+
 }
 
 
 boost::leaf::result<std::shared_ptr<Statement>> Instance::prepareStatement(
   std::string_view sqlLine
 ) noexcept{
+  
   std::shared_ptr<Statement> statement = std::make_shared<Statement>(
     shared_from_this()
   );
@@ -87,6 +93,7 @@ Instance::Instance()
 
 
 int Instance::connect(std::filesystem::path path, int flags) noexcept{
+  
   int result = sqlite3_open_v2(
     path.string().c_str(), 
     &db_, 
@@ -97,7 +104,9 @@ int Instance::connect(std::filesystem::path path, int flags) noexcept{
     result = sqlite3_extended_result_codes(db_, 1);
   }
   return result;
+
 }
 
 
-}
+
+}//namespace database::embedded::SQLite3

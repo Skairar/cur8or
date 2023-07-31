@@ -2,7 +2,9 @@
 
 #include "ranges/Table.hpp"
 
+
 namespace database::embedded::SQLite3{
+
 
 
 Statement::Statement(std::shared_ptr<Instance> instance) noexcept
@@ -12,12 +14,16 @@ Statement::Statement(std::shared_ptr<Instance> instance) noexcept
   //empty
 }
 
+
+
 Statement::~Statement(){
   sqlite3_finalize(stmt_);
 }
 
 
+
 boost::leaf::result<Table> Statement::evaluate() noexcept{
+
   //likely unnecessary, might remove later unless I find need
   //to reuse statements
   sqlite3_reset(stmt_);
@@ -33,8 +39,9 @@ boost::leaf::result<Table> Statement::evaluate() noexcept{
         std::string{sqlite3_errstr(result)}
       );
   }
-}
-
-
 
 }
+
+
+
+}//namespace database::embedded::SQLite3

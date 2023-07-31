@@ -6,8 +6,10 @@
 namespace network::http::helpers {
 
 
+
 std::string_view fileMimeType(const std::filesystem::path &filePath) noexcept
 {
+
   using namespace std::literals;
 
   static const std::unordered_map<
@@ -41,7 +43,9 @@ std::string_view fileMimeType(const std::filesystem::path &filePath) noexcept
   auto iter = extensionMapping.find(filePath.extension().string());
 
   return (iter != extensionMapping.end()) ? iter->second : "application/text"sv;
+
 }
 
 
-}
+
+}//namespace network::http::helpers
