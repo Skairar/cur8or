@@ -66,13 +66,7 @@ KeyValueDataset keyValueDatasetGen() {
   TO DO: Either implement some wrapper types or find another way to define
   tests that doesn't require all the samples to be immediately printable
 */
-typedef std::pair<
-  const std::basic_string_view<char>,
-  std::unordered_multimap<
-    std::basic_string_view<char>,
-    std::basic_string_view<char>
-  >
-> pair;
+typedef KeyValueDataset::value_type pair;
 BOOST_TEST_DONT_PRINT_LOG_VALUE(pair)
 
 BOOST_DATA_TEST_CASE(
@@ -156,22 +150,9 @@ ParamPathDataset paramPathDatasetGen() {
 }
 
 
-typedef std::_List_iterator<
-  std::pair<
-    std::basic_string_view<char>,
-    std::basic_string_view<char>
-  >
-> list_iter;
+typedef ListType::iterator list_iter;
 BOOST_TEST_DONT_PRINT_LOG_VALUE(list_iter)
-typedef std::pair<
-  const std::basic_string_view<char>,
-  std::__cxx11::list<
-    std::pair<
-      std::basic_string_view<char>,
-      std::basic_string_view<char>
-    >
-  >
-> pair2;
+typedef ParamPathDataset::value_type pair2;
 BOOST_TEST_DONT_PRINT_LOG_VALUE(pair2)
 
 

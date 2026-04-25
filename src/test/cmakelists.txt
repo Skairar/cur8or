@@ -1,6 +1,6 @@
 enable_testing()
 
 add_executable(utilities_test utilities/utilities_test.cpp)
-target_link_libraries(utilities_test PRIVATE utilities)
+target_link_libraries(utilities_test PRIVATE utilities Boost::headers)
 
 add_test(NAME "Utilities Test" COMMAND utilities_test)
