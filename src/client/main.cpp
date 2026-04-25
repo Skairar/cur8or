@@ -43,9 +43,6 @@ int main(int argc, char* argv[])
 
   asio::io_context context{threads};
 
-  /*
-
-  */
   std::shared_ptr<Instance> database = boost::leaf::try_handle_all(
     []() -> boost::leaf::result<std::shared_ptr<Instance>> {
       BOOST_LEAF_AUTO(database, Instance::newInstance(
@@ -74,7 +71,7 @@ int main(int argc, char* argv[])
   vpath->registerCallback(
     "",
     [interfaceRoot](logic::vpath::Query& query) mutable{
-      interfaceRoot /= "Query.html";
+      interfaceRoot /= "query.html";
       query.returnFile(interfaceRoot);
     }
   );
@@ -120,7 +117,7 @@ int main(int argc, char* argv[])
           //Perhaps giving Query it's own streams for output might be worth
           //consideration
           query.returnError(errorMessage.str());
-          return leaf::new_error("empty");
+          return leaf::new_error(std::string{"empty"});
         }
       );
       //Yea, leaf is great and all, but ideally I'd want the invokation of

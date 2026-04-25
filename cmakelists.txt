@@ -1,36 +1,36 @@
-cmake_minimum_required(VERSION 3.26)
-project(cur8-proto VERSION 0.0.1)
-include (CTest)
+cmake_minimum_required(VERSION 4.3)
+project(cur8-proto VERSION 0.0.1 LANGUAGES C CXX)
+
+include(CTest)
 
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_compile_options(-std=c++2b -fconcepts-diagnostics-depth=200)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-file(STRINGS libpaths.txt ConfigContents)
-foreach(NameAndValue ${ConfigContents})
-    # Strip leading spaces
-    string(REGEX REPLACE "^[ ]+" "" NameAndValue ${NameAndValue})
-    # Find variable name
-    string(REGEX MATCH "^[^=]+" Name ${NameAndValue})
-    # Find the value
-    string(REPLACE "${Name}=" "" Value ${NameAndValue})
-    # Set the variable
-    cmake_path(SET ${Name} "${Value}")
-endforeach()
+#required due to tested toolchains not handling the newer boost config cmake approach correctly
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 OLD)
+endif()
+if(POLICY CMP0144)
+    cmake_policy(SET CMP0144 NEW)
+endif()
 
-#set(Boost_DEBUG 1)
-#set(Boost_DETAILED_FAILURE_MSG 1)
-set(Boost_ARCHITECTURE "-x64")
-set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost 1.91.0 REQUIRED COMPONENTS
+    json
+)
 
-find_package(Boost 1.82.0 REQUIRED COMPONENTS log program_options json)
-
-add_library(SQLite3 STATIC ${SQLite_DIR}/sqlite3.c
-                           ${SQLite_DIR}/sqlite3.h)
-
-include_directories(${Boost_INCLUDE_DIRS} ${SQLite_DIR} src/modules)
+add_library(SQLite3 STATIC ${SQLite3_DIR}/sqlite3.c)
+set_target_properties(SQLite3 PROPERTIES LINKER_LANGUAGE C)
+target_include_directories(SQLite3 PUBLIC ${SQLite3_DIR})
 
 add_subdirectory(src/modules)
 add_subdirectory(src/client)
 add_subdirectory(src/test)
+
+add_custom_target(copy-root ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/root
+        ${CMAKE_BINARY_DIR}/root
+)
