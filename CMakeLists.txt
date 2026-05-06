@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 4.2)
 project(cur8-proto VERSION 0.0.1 LANGUAGES C CXX)
 
 include(CTest)
